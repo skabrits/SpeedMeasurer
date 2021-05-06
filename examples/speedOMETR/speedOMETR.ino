@@ -1,4 +1,4 @@
-#include <SpeedMeasurer>
+#include <SpeedMeasurer.h>
 #include <Wire.h>
 #include <math.h>
 

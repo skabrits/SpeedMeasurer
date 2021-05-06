@@ -38,7 +38,7 @@ class SpeedMeasurer
     SpeedMeasurer(int static_pressure_pin, int dynamic_pressure_pin);
       // inits pito tube on 2 controling pins (for 1 arduino to switch devices)
 
-    SpeedMeasurer(int static_pressure_pin, int dynamic_pressure_pin, int percision, bool rele = 1);
+    SpeedMeasurer(int static_pressure_pin, int dynamic_pressure_pin, int percision, bool rele = true);
       // percision parameter - quality of measurment, 0 - fast, 3 - percise
       // rele - should wait for breakout when switching or not
     
@@ -89,7 +89,7 @@ class SpeedMeasurer
     
   private:
   
-    bool s_t_flag = false, d_t_flag = false, s_p_flag = false, d_p_flag = false, s_on = false, d_on = false, _rele;
+    bool s_t_flag = false, d_t_flag = false, s_p_flag = false, d_p_flag = false, s_on = false, d_on = false, _rele = true;
     int _spin, _dpin, _percision = 2;
     SFE_BMP180 s, d;
     
