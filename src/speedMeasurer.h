@@ -2,6 +2,19 @@
     speedMeasurer.h - Library for measuring speed with 2 bmp180 sensors.
     Created by Vsevolod Kabrits, May 3, 2021. Version 1.0.
     Released into the public domain.
+ 
+    .                  .
+    sda               scl
+    |                  |
+    | \              / |
+    ------        ------ 2 breakout elements (reles or chips)
+    |     \      /     |
+    |       \  /       |
+    |        /\        |
+    |      /    \      |
+    |    /        \    |
+    |  /            \  |
+    bmp180 - 1     bmp180 - 2
 */
 
 #ifndef speedMeasurer_h
@@ -15,87 +28,87 @@
 
 class SpeedMeasurer
 {
-	public:
-		SFE_BMP180(); // base type
+  public:
 
-		char begin();
-			// call pressure.begin() to initialize BMP180 before use
-			// returns 1 if success, 0 if failure (bad component or I2C bus shorted?)
-		
-		char startTemperature(void);
-			// command BMP180 to start a temperature measurement
-			// returns (number of ms to wait) for success, 0 for fail
+    double T_s = -1000, T_d = -1000, P_s = -100, P_d = -100, v = -100, T_s_basic = 0, T_d_basic = 0, P_s_basic = 0, P_d_basic = 0, T_basic = 0, P_basic = 0;
+    
+    SpeedMeasurer(int static_pressure_pin, int dynamic_pressure_pin) {
+      // inits pito tube on 2 controling pins (for 1 arduino to switch devices)
+    }
 
-		char getTemperature(double &T);
-			// return temperature measurement from previous startTemperature command
-			// places returned value in T variable (deg C)
-			// returns 1 for success, 0 for fail
+    SpeedMeasurer(int static_pressure_pin, int dynamic_pressure_pin, int percision, bool rele = 1) {
+      // percision parameter - quality of measurment, 0 - fast, 3 - percise
+      // rele - should wait for breakout when switching or not
+    }
+    
+    bool begin() {
+      // returns 1 if both sensors initialized sucsessfully, 0 otherwise
+    }
 
-		char startPressure(char oversampling);
-			// command BMP180 to start a pressure measurement
-			// oversampling: 0 - 3 for oversampling value
-			// returns (number of ms to wait) for success, 0 for fail
+    bool prepare() {
+      // calibrates sensors
+      // returns 1 if calibration was sucsessful, 0 otherwise
+    }
 
-		char getPressure(double &P, double &T);
-			// return absolute pressure measurement from previous startPressure command
-			// note: requires previous temperature measurement in variable T
-			// places returned value in P variable (mbar)
-			// returns 1 for success, 0 for fail
+    
+    byte startemp_s() {
+      // starts tempreture measurment on static pressure sensor
+      // returns num of ms to wait until parameter is measured, 0 if failed to connect (on bmp 180 usually 5 ms)
+    }
+    
+    byte startemp_d() {
+      // starts tempreture measurment on dynamic pressure sensor
+      // returns num of ms to wait until parameter is measured, 0 if failed to connect (on bmp 180 usually 5 ms)
+    }
 
-		double sealevel(double P, double A);
-			// convert absolute pressure to sea-level pressure (as used in weather data)
-			// P: absolute pressure (mbar)
-			// A: current altitude (meters)
-			// returns sealevel pressure in mbar
 
-		double altitude(double P, double P0);
-			// convert absolute pressure to altitude (given baseline pressure; sea-level, runway, etc.)
-			// P: absolute pressure (mbar)
-			// P0: fixed baseline pressure (mbar)
-			// returns signed altitude in meters
+    bool getemp_s() {
+      // writes static sensor temperature to T_s variable
+      // returns 1 if operation was sucsessful, 0 otherwise
+    }
+    
+    bool getemp_d() {
+      // writes dynamic sensor temperature to T_d variable
+      // returns 1 if operation was sucsessful, 0 otherwise
+    }
 
-		char getError(void);
-			// If any library command fails, you can retrieve an extended
-			// error code using this command. Errors are from the wire library: 
-			// 0 = Success
-			// 1 = Data too long to fit in transmit buffer
-			// 2 = Received NACK on transmit of address
-			// 3 = Received NACK on transmit of data
-			// 4 = Other error
+    byte startpressure_s() {
+      // starts pressure measurment on static pressure sensor
+      // returns num of ms to wait until parameter is measured, 0 if failed to connect (on bmp 180 usually 26 ms)
+    }
+    
+    byte startpressure_d() {
+      // starts pressure measurment on dynamic pressure sensor
+      // returns num of ms to wait until parameter is measured, 0 if failed to connect (on bmp 180 usually 26 ms)
+    }
 
-	private:
-	
-		char readInt(char address, int16_t &value);
-			// read an signed int (16 bits) from a BMP180 register
-			// address: BMP180 register address
-			// value: external signed int for returned value (16 bits)
-			// returns 1 for success, 0 for fail, with result in value
 
-		char readUInt(char address, uint16_t &value);
-			// read an unsigned int (16 bits) from a BMP180 register
-			// address: BMP180 register address
-			// value: external unsigned int for returned value (16 bits)
-			// returns 1 for success, 0 for fail, with result in value
+    bool getpressure_s() {
+      // writes static sensor pressure to P_s variable
+      // returns 1 if operation was sucsessful, 0 otherwise
+    }
+    
+    bool getpressure_d() {
+      // writes dynamic sensor pressure to P_d variable
+      // returns 1 if operation was sucsessful, 0 otherwise
+    }
 
-		char readBytes(unsigned char *values, char length);
-			// read a number of bytes from a BMP180 register
-			// values: array of char with register address in first location [0]
-			// length: number of bytes to read back
-			// returns 1 for success, 0 for fail, with read bytes in values[] array
-			
-		char writeBytes(unsigned char *values, char length);
-			// write a number of bytes to a BMP180 register (and consecutive subsequent registers)
-			// values: array of char with register address in first location [0]
-			// length: number of bytes to write
-			// returns 1 for success, 0 for fail
-			
-		int16_t AC1,AC2,AC3,VB1,VB2,MB,MC,MD;
-		uint16_t AC4,AC5,AC6; 
-		double c5,c6,mc,md,x0,x1,x2,y0,y1,y2,p0,p1,p2;
-		char _error;
+    double calc_velocity() {
+      // calculates velocity and returns it
+    }
+    
+  private:
+  
+    bool s_t_flag = false, d_t_flag = false, s_p_flag = false, d_p_flag = false, s_on = false, d_on = false, _rele;
+    int _spin, _dpin, _percision = 2;
+    SFE_BMP180 s, d;
+    
+    bool d2s() {
+      // activates static sensor and diactivates dynamic
+    }
+    bool s2d() {
+      // activates dynamic sensor and diactivates static
+    }
 };
-
-#define SM SpeedMeasurer
-#define BMP180_ADDR 0x77 // 7-bit address
 
 #endif

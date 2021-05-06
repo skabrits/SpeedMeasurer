@@ -1,27 +1,29 @@
 #######################################
-# Syntax Coloring Map for SFE_BMP180
+# Syntax Coloring Map for speedMEASURER
 #######################################
 
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
 
-SFE_BMP180	KEYWORD1
+SpeedMeasurer	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 
 begin	KEYWORD2
-startTemperature	KEYWORD2
-getTemperature	KEYWORD2
-startPressure	KEYWORD2
-getPressure	KEYWORD2
-sealevel	KEYWORD2
-altitude	KEYWORD2
+prepare	KEYWORD2
+startemp_s	KEYWORD2
+startemp_d	KEYWORD2
+getemp_s	KEYWORD2
+getemp_d	KEYWORD2
+startpressure_s	KEYWORD2
+startpressure_d	KEYWORD2
+getpressure_s	KEYWORD2
+getpressure_d	KEYWORD2
+calc_velocity	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
 #######################################
-
-BMP180_ADDR	LITERAL1

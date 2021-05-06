@@ -1,5 +1,5 @@
-SparkFun Example Sketches
+Example Sketches
 ---------------------------
 
 
-Basic Arduino Example Sketches that work with the SparkFun BMP180 Library.
+Basic Arduino Example Sketches that work with speedMeasurer Library.
