@@ -19,6 +19,7 @@
 
 #include <speedMeasurer.h>
 #include <Wire.h>
+#include <SFE_BMP180.h>
 #include <stdio.h>
 #include <math.h>
 
@@ -29,7 +30,7 @@ SpeedMeasurer::SpeedMeasurer(int static_pressure_pin, int dynamic_pressure_pin) 
 }
 
 
-SpeedMeasurer::SpeedMeasurer(int static_pressure_pin, int dynamic_pressure_pin, int percision, bool rele = 1) {
+SpeedMeasurer::SpeedMeasurer(int static_pressure_pin, int dynamic_pressure_pin, int percision, bool rele) {
   _spin = static_pressure_pin;
   _dpin = dynamic_pressure_pin;
   _percision = percision % 4;
